@@ -1,5 +1,15 @@
 <!DOCTYPE html>
-<?php include ("../config.php"); ?>
+<?php include ("../config.php"); 
+if(isset($_POST['submit'])){
+    $name=$_POST['name'];
+    $email=$_POST['email'];
+    $userName=$_POST['userName'];
+    $state=$_POST['state'];
+    $phone=$_POST['phone'];
+    $city=$_POST['city'];
+    $postal=$_POST['postal'];
+}
+?>
 <html lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -39,13 +49,14 @@
   <h2>User Registration</h2>
    </div>
     <div class="col-md-6 no-pad text-cent">
-      <form role="form" class="form_reg">
+      <form role="form" class="form_reg" action="" method="post">
         <div class="col-md-12 no-pad margin-bottom-20">
           <div class="col-md-6 no-pad-left">
             <div class="form-group">
-              <input type="text" class="form-control" placeholder="Name">
-              <input type="text" class="form-control" placeholder="Email">
-              <select class="form-control option">
+              <input type="text" class="form-control" placeholder="Name" name="name">
+              <input type="text" class="form-control" placeholder="Email" name="email">
+              <input type="text" class="form-control" placeholder="Username" name="userName">
+              <select class="form-control option" name="state">
                 <option value="">State/Prov</option>
                 <option value="2">Alabama</option>
                 <option value="3">Alaska</option>
@@ -108,14 +119,14 @@
                 <option value="50">Wisconsin</option>
                 <option value="51">Wyoming</option>
               </select>
-               <input type="text" class="form-control" placeholder="Phone">
-              <input type="text" class="form-control" placeholder="City">
-              <input type="text" class="form-control" placeholder="Postal">
+               <input type="text" class="form-control" placeholder="Phone" name="phone">
+              <input type="text" class="form-control" placeholder="City" name="city">
+              <input type="text" class="form-control" placeholder="Postal" name="postal">
             </div>
           </div>
         </div>
         <div class="col-md-12 pad_top_bot">
-        <button type="submit" class="btn reg-btn">SIGNUP</button>
+        <button type="submit" class="btn reg-btn" name="submit">SIGNUP</button>
         </div>
       </form>
     </div>

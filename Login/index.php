@@ -23,7 +23,6 @@ else{
 $x1=1;
 }
 }
-
 else if(isset($_POST['loginAdmin']))
 {
 session_start();
