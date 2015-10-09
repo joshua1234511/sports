@@ -1,0 +1,25 @@
+@charset "utf-8";
+/* CSS Document */
+
+
+@font-face {
+    font-family: 'MyriadProRegular';
+    src: url('../fonts/myriadpro-regular-webfont.eot');
+    src: url('../fonts/myriadpro-regular-webfont.eot') format('embedded-opentype'),
+         url('../fonts/myriadpro-regular-webfont.woff') format('woff'),
+         url('../fonts/myriadpro-regular-webfont.ttf') format('truetype'),
+         url('../fonts/myriadpro-regular-webfont.svg#MyriadProRegular') format('svg');
+		font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'HelveticaNeue';
+    src: url('../fonts/HelveticaNeue.eot');
+    src: url('../fonts/HelveticaNeue.eot') format('embedded-opentype'),
+         url('../fonts/HelveticaNeue.woff') format('woff'),
+         url('../fonts/HelveticaNeue.ttf') format('truetype'),
+         url('../fonts/HelveticaNeue.svg#HelveticaNeue') format('svg');
+		font-weight: normal;
+    font-style: normal;
+}
