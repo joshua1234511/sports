@@ -20,6 +20,7 @@ die();
 $site="//sports.sj/";
 $images=$site."images/";
 $login=$site."Login/";
+$change=$login."change.php";
 $forgot=$login."forgot.php";
 $registration=$site."Registration/";
 $events=$site."Events/";

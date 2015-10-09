@@ -5,11 +5,12 @@
       <div class="foo-1 no-pad-left foo-shadow foo-padding">
         <h4>Navigation</h4>
         <ul class="list-unstyled">
+        <form action="<?php echo $login ?>" method="post" id="adminLink"><input type="hidden" value="admin" name="admin"/> </form>
           <li><a href="<?php echo $site ?>">Home</a></li>
           <li><a href="<?php echo $events ?>">All Events</a></li>
+          <li><a href="#" onclick="document.getElementById('adminLink').submit();">Admin</a></li>
           </ul>
         </div>  
-      
       <div class="foo-3 foo-padding">
         <h4>Follow Us</h4>
         <ul class="list-unstyled social">
