@@ -5,10 +5,10 @@
       <div class="foo-1 no-pad-left foo-shadow foo-padding">
         <h4>Navigation</h4>
         <ul class="list-unstyled">
-        <form action="<?php echo $login ?>" method="post" id="adminLink"><input type="hidden" value="admin" name="admin"/> </form>
+        <form action="<?php echo $login ?>" method="post" id="adminLink"><input type="hidden" value="adminLogin" name="adminLogin"/> </form>
           <li><a href="<?php echo $site ?>">Home</a></li>
           <li><a href="<?php echo $events ?>">All Events</a></li>
-          <li><a href="#" onclick="document.getElementById('adminLink').submit();">Admin</a></li>
+          <li><a href="" onclick="document.getElementById('adminLink').submit();">Admin</a></li>
           </ul>
         </div>  
       <div class="foo-3 foo-padding">
@@ -16,7 +16,7 @@
         <ul class="list-unstyled social">
           <li class="no-pad-left"><a href="#"><img src="<?php echo $images ?>facebook.png" alt="Facebook Icon" /></a></li>
           <li><a href="#"><img src="<?php echo $images ?>twitter.png" alt="Twitter Icon" /></a></li>
-          <li class="no-pad-right"><a href="#"><img src="<?php echo $images ?>linkedin.png" alt="Linkedin Icon" /></a></li>
+          <li class="no-pad-right"><a href=""><img src="<?php echo $images ?>linkedin.png" alt="Linkedin Icon" /></a></li>
           </ul>
           <div class="clearfix"></div>
         </div>

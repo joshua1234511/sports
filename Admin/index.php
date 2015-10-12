@@ -2,48 +2,77 @@
 <?php 
 include_once('../Configuration/dpFunctions.php'); 
 require_once ('../Configuration/links.php');
+session_start(); 
+if(!$_SESSION['user'])
+{
+  header('location:'.$site);
+}
 $funObj = new dbFunction(); 
-if(isset($_POST['register'])){  
-        $x1=0;
-        $name =$_POST['name'];
-        $userName = $_POST['userName'];  
-        $email = $_POST['email'];  
-        $password = $_POST['password'];  
-        $confirmPassword = $_POST['cpassword'];  
+
+if(isset($_POST['update']) && isset($_POST['changeDetails'])) {
+  $x1=0;
+        $name =$_POST['name']; 
+        $userName =$_POST['userName']; 
         $country = $_POST['country'];
         $state = $_POST['state'];
         $phone = $_POST['phone'];
         $city = $_POST['city'];
         $postal = $_POST['postal'];
-        if($password == $confirmPassword){  
-            $userNameVerify = $funObj->isUserNameExist($userName);  
-            $emailVerify = $funObj->isEmailExist($email);
-            if(!$userNameVerify){    
-            if(!$emailVerify){  
-                $register = $funObj->UserRegister($name, $userName, $email, $password, $country, $state, $phone, $city, $postal);  
-                if($register){  
-                     echo "<script>alert('Registration Successful')</script>";  
+            $userNameVerify = $funObj->isUserNameExist($userName);
+            if($userName === $_SESSION['userName'] ){
+              $userNameVerify =false;
+            }
+            if(!$userNameVerify){ 
+                $update = $funObj->userUpdate($name, $userName, $country, $state, $phone, $city, $postal,$_SESSION['email']);  
+                if($update){  
+                     echo "<script>alert('Update Successful')</script>";  
                 }else{  
-                    echo "<script>alert('Registration Not Successful')</script>";  
+                    echo "<script>alert('Update Not Successful')</script>";  
                 }  
-            } else {  
-                $x=3; 
-            } 
             }
              else {  
                 $x=2; 
             } 
-        } else {  
-            $x=1;
-          
-        }  
+} 
+else if(isset($_POST['changeDetails'])) {
+  $x1=0;
+  $array=$funObj->profile( $_SESSION['userName'] );
+  $name = $array['name'];
+  $country = $array['country'];
+  $state = $array['state'];
+  $phone = $array['phone'];
+  $city = $array['city'];
+  $postal = $array['postal'];
+}
+else if(isset($_POST['updatePassword']) && isset($_POST['changePassword'])) {
+  $opassword=$_POST['opassword'];
+  $password=$_POST['password'];
+  $cpassword=$_POST['cpassword'];
+  if($password == $cpassword){ 
+  $login = $funObj->login($_SESSION['email'], $opassword);  
+        if ($login) {   
+          $update = $funObj->userUpdatePassword($password, $_SESSION['email']);  
+                if($update){  
+                     echo "<script>alert('Update Successful')</script>";  
+                }else{  
+                    echo "<script>alert('Update Not Successful')</script>";  
+                }  
+        }
+        else {
+          $x=4;
+        }
+  }
+  else {
+    $x=1;
+  }
+}
 
-    }  
+
 ?>
 <html lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Duke Careers | Registration Form</title>
+<title>Duke Careers | Admin</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
 <!-- Latest compiled CSS -->
@@ -76,39 +105,69 @@ if(isset($_POST['register'])){
 <!-- content wrap -->
 <div class="row content-wrap">
   <div class="main-wrapper content">
-  <h2>User Registration</h2>
+  <h2>Profile</h2>
    </div>
     <div class="col-md-6 no-pad text-cent">
+<?php if(isset($_POST['changeDetails'])) {?>
       <form role="form" class="form_reg" action="" method="post">
         <div class="col-md-12 no-pad margin-bottom-20">
           <div class="col-md-6 no-pad-left">
             <div class="form-group">
-              <input type="text" class="form-control" placeholder="Name" name="name" required  <?php if($x1==0){ ?>value="<?php echo $name; ?>" <?php } ?>>
+              Name:<input type="text" class="form-control"  name="name" required  <?php if($x1==0){ ?>value="<?php echo $name; ?>" <?php } ?>>
               <?php if($x==2){ ?>
               <span style="color:red;">Username Already Exist</span>
               <?php } ?>
-              <input type="text" class="form-control" placeholder="Username" name="userName" required  <?php if($x1==0){ ?>value="<?php echo $userName; ?>" <?php } ?>>
-              <?php if($x==3){ ?>
-              <span style="color:red;">Email Already Exist</span>
-              <?php } ?>
-              <input type="email" class="form-control" placeholder="Email" name="email" required  <?php if($x1==0){ ?>value="<?php echo $email; ?>" <?php } ?>>
-              <?php if($x==1){ ?>
-              <span style="color:red;">Password Not Match</span>
-              <?php } ?>
-              <input type="password" class="form-control" placeholder="Password" name="password" required>
-              <input type="password" class="form-control" placeholder="Confirm Password" name="cpassword" required>
-              <input type="text" class="form-control" placeholder="Country" name="country" id="country" required  <?php if($x1==0){ ?>value="<?php echo $country; ?>" <?php } ?>>
-              <input type="text" class="form-control" placeholder="State" name="state" id="administrative_area_level_1" required  <?php if($x1==0){ ?>value="<?php echo $state; ?>" <?php } ?>>
-              <input type="number" class="form-control" placeholder="Phone" name="phone" required  <?php if($x1==0){ ?>value="<?php echo $phone; ?>" <?php } ?>>
-              <input type="text" class="form-control" placeholder="City" name="city" id="locality" required  <?php if($x1==0){ ?>value="<?php echo $city; ?>" <?php } ?>>
-              <input type="number" class="form-control" placeholder="Postal" name="postal" id="postal_code" required  <?php if($x1==0){ ?>value="<?php echo $postal; ?>" <?php } ?>>
+              Username:<input type="text" class="form-control"  name="userName" required  <?php if($x1==0){ ?>value="<?php echo $_SESSION['userName']; ?>" <?php } ?>>
+              Country:<input type="text" class="form-control"  name="country" id="country" required  <?php if($x1==0){ ?>value="<?php echo $country; ?>" <?php } ?>>
+              State:<input type="text" class="form-control"  name="state" id="administrative_area_level_1" required  <?php if($x1==0){ ?>value="<?php echo $state; ?>" <?php } ?>>
+              Phone:<input type="number" class="form-control"  name="phone" required  <?php if($x1==0){ ?>value="<?php echo $phone; ?>" <?php } ?>>
+              City:<input type="text" class="form-control"  name="city" id="locality" required  <?php if($x1==0){ ?>value="<?php echo $city; ?>" <?php } ?>>
+              Postal:<input type="number" class="form-control"  name="postal" id="postal_code" required  <?php if($x1==0){ ?>value="<?php echo $postal; ?>" <?php } ?>>
+              <input type="hidden"  name="changeDetails" value="changeDetails">
             </div>
           </div>
         </div>
         <div class="col-md-12 pad_top_bot">
-        <button type="submit" class="btn reg-btn" name="register">SIGNUP</button>
+        <button type="submit" class="btn reg-btn" name="update">SAVE</button>
+        <a class="btn forgot-btn" href="<?php echo $admin ?>">Cancel</a>
         </div>
       </form>
+
+<?php } else if(isset($_POST['changePassword'])) {?>
+      
+      <form role="form" class="form_reg" action="" method="post">
+        <div class="col-md-12 no-pad margin-bottom-20">
+          <div class="col-md-6 no-pad-left">
+            <div class="form-group">
+            <?php if($x==4){ ?>
+              <span style="color:red;">InCorrect Password</span>
+              <?php } ?>
+              <input type="password" class="form-control" placeholder="Old Password" name="opassword" required>
+              <?php if($x==1){ ?>
+              <span style="color:red;">Password Not Match</span>
+              <?php } ?>
+              <input type="password" class="form-control" placeholder="Old Password" name="password" required>
+              <input type="password" class="form-control" placeholder="Confirm Password" name="cpassword" required>
+              <input type="hidden"  name="changePassword" value="changePassword">
+            </div>
+          </div>
+        </div>
+        <div class="col-md-12 pad_top_bot">
+        <button type="submit" class="btn reg-btn" name="updatePassword">Update</button>
+        <a class="btn forgot-btn" href="<?php echo $admin ?>">Cancel</a>
+        </div>
+      </form>
+
+<?php }
+else { ?>
+      <form role="form" class="form_reg" action="" method="post">
+        <div class="col-md-12 pad_top_bot">
+        <button type="submit" class="btn reg-btn" name="changeDetails">Edit Profile</button>
+        <button type="submit" class="btn forgot-btn" name="changePassword">Change Password</button>
+        <a href="<?php echo $categories ?>" class="btn reg-btn">Categories</a>
+        </div>
+      </form>
+<?php } ?>
     </div>
   </div>
 </div>

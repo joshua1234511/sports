@@ -179,10 +179,12 @@ optgroup {
 table {
   border-spacing: 0;
   border-collapse: collapse;
+    text-align: center;
 }
 td,
 th {
-  padding: 0;
+  padding: 1em;
+    text-align: center;
 }
 @media print {
   * {

@@ -8,8 +8,23 @@
     <div class="menu-wrap pull-right">
        <div class="top-link">
          <ul>
-           <li class="mg-rt"><a href="<?php echo $login ?>" class="btn-cust btn-cust-black grow">LOGIN</a></li>
-           <li><a href="<?php echo $registration ?>" class="btn-cust btn-cust-orng grow">SIGNUP</a></li>
+          <?php
+          if(isset($_SESSION['user'])){
+            ?>
+            <li>Welcome: <?php echo $_SESSION['userName'] ?> &nbsp&nbsp</li>
+<li class="mg-rt"><a href="<?php echo $logout ?>" class="btn-cust btn-cust-black grow"> LOGOUT</a></li>
+
+        <?php  }
+          else {
+
+?>
+<li class="mg-rt"><a href="<?php echo $login ?>" class="btn-cust btn-cust-black grow">LOGIN</a></li>
+ <li><a href="<?php echo $registration ?>" class="btn-cust btn-cust-orng grow">SIGNUP</a></li>
+          <?php 
+          }
+          ?>
+           
+          
          </ul>
       </div>
        <div class="clearfix"></div>

@@ -35,6 +35,11 @@ address{
 address p{
   	font-size:13px;
 }
+
+#categories {
+	text-align: center;
+	padding: 2em;
+}
 /* error messages */
 .error{
 	font-size: 11px;

@@ -1,51 +1,33 @@
-<?php
-include ("../config.php");
-if(isset($_POST['login']))
-{
-session_start();
-$userName=$_POST['userName'];
-$pass;
-$sql = "SELECT * FROM users WHERE userName = '$userName' OR email = '$userName'";
-$result = mysql_query($sql);
-if (mysql_num_rows($result) !== 0){  
-while ($row = mysql_fetch_assoc($result)) {
-$pass = $row['password'];
-$userName = $row['userName'];
-}
-}
-$password=$_POST['password'];
-if($password===$pass){ 
-$_SESSION["username"] = $userName;
-$x=0;
-header('Location: '.$site); 
-}
-else{
-$x1=1;
-}
-}
-else if(isset($_POST['loginAdmin']))
-{
-session_start();
-$userName=$_POST['userName'];
-$pass;
-$sql = "SELECT * FROM users WHERE userName = '$userName'";
-$result = mysql_query($sql);
-if (mysql_num_rows($result) !== 0){  
-while ($row = mysql_fetch_assoc($result)) {
-$pass = $row['password'];
-$userName = $row['userName'];
-}
-}
-$password=$_POST['password'];
-if($password===$pass){ 
-$_SESSION["username"] = $userName;
-$x=0;
-header('Location: '.$change); 
-}
-else{
-$x=1;
-}
-}
+<?php 
+    include_once('../Configuration/dpFunctions.php'); 
+    require_once ('../Configuration/links.php');
+    $funObj = new dbFunction();  
+    if(isset($_POST['login'])){  
+        $email = $_POST['email'];  
+        $password = $_POST['password'];  
+        $login = $funObj->login($email, $password);  
+        if ($login) {   
+         if(($_SESSION['user']==='Admin')||($_SESSION['user']==='Editor')){
+          header('location:'.$admin);
+         }
+         else{
+           header('location:'.$site);
+         }
+        }
+        else {  
+          $x=1;
+              
+        }  
+    }  
+    if(isset($_POST['forgotPassword'])){ 
+    $email = $_POST['email'];
+    $emailVerify = $funObj->isEmailExist($email);
+    if($emailVerify){  
+      $x=3;
+    }
+    else
+      $x=2;
+    } 
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -81,25 +63,24 @@ $x=1;
     <?php if($x==1){ ?>
     <span style="color:red;">Incorrect Username Or Password</span>
     <?php } ?>
-    <form action="<?php echo $login ?>" method="post" role="form">
+    <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post" role="form">
       <div class="login-form col-md-4 col-xs-12 no-pad">
-        <div class="label-txt">Username : <br>
-          <input type="text" class="form-control" id="userName" name="userName">
+      <?php if($x==2){ ?>
+              <span style="color:red;">Invalid Email</span>
+              <?php } 
+            else if($x==3){ ?>
+              <span style="color:red;">Password reset link sent to email</span>
+              <?php } ?>
+        <div class="label-txt">Username/Email : <br>
+          <input type="text" class="form-control" name="email" required>
         </div>
         <div class="label-txt">Password : <br>
-          <input type="password" class="form-control" id="password" name="password">
-          <input type="hidden" value="admin" name="admin"/> 
+          <input type="password" class="form-control" name="password">
         </div>
-        <?php if(!isset($_POST['admin'])) { ?>
         <div class="login-btn">
-          <input class="btn reg-btn" type="submit" value="Login" id="login" name="login">
-          <a class="btn forgot-btn" href="<?php echo $forgot ?>">Forgot Password</a>
+          <input class="btn reg-btn" type="submit" value="Login" name="login">
+           <input class="btn forgot-btn" type="submit" value="Forgot Password" name="forgotPassword">
         </div>
-        <?php } else { ?>
-         <div class="login-btn">
-          <input class="btn reg-btn" type="submit" value="Login" id="loginAdmin" name="loginAdmin">
-        </div>
-        <?php } ?>
       </div> 
     </form> 
   </div>
